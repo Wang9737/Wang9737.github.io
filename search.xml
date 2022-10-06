@@ -56,11 +56,30 @@
     
     
     <entry>
-      <title>Hello World</title>
-      <link href="/2022/07/27/hello-world/"/>
-      <url>/2022/07/27/hello-world/</url>
+      <title>集合</title>
+      <link href="/2020/09/06/%E9%9B%86%E5%90%88/"/>
+      <url>/2020/09/06/%E9%9B%86%E5%90%88/</url>
       
-        <content type="html"><![CDATA[<p><strong>对搭建的博客完成大部分主题渲染，纪念一下</strong></p><p><img src="/2022/07/27/hello-world/Develop\MyBlog\themes\butterfly\source\img\tag.png"></p><p><strong>PS:博文就看心情更新吧</strong></p>]]></content>
+        <content type="html"><![CDATA[<ul><li><h3 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h3><blockquote><ul><li>什么是集合</li><li>ArrayList</li><li>LinkedList</li><li>HashSet</li><li>HashMap</li></ul></blockquote></li></ul><hr><ul><li><h4 id="Java中，什么是集合"><a href="#Java中，什么是集合" class="headerlink" title="Java中，什么是集合"></a>Java中，什么是集合</h4><blockquote><p><strong>在Java中，集合可以看做是一个容器，用来存放各种元素。</strong>集合分为了单列集合collection以及双列集合map，其中单列集合又包括了List以及Set集合，再往下List集合又分为了ArrayList以及LinkedList，Set集合分为HashSet以及TreeSet集合。而双列集合Map分为了TreeMap和HashMap。 </p></blockquote></li><li><h4 id="ArrayList集合"><a href="#ArrayList集合" class="headerlink" title="ArrayList集合"></a>ArrayList集合</h4><blockquote><p>说到List集合，其中最常用的集合就是ArrayList集合，<strong>ArrayList集合底层是基于数组来实现容量大小的动态变化，</strong>为什么会是一个数组呢？我们通过源码可以发现，其在定义集合大小size的时候，使用的是一个<strong>Object[ ]数组</strong>，因此我们可以推断，ArrayList的底层就是数组。因此我们同样可以得出其查询快，增删慢的特点，毕竟底层是数组结构嘛。</p><p>为什么会增删慢，这就要说到ArrayList集合的<strong>存储特点了：有序存储，且元素可以重复。</strong>因为要保证元素的有序，所以当对集合中的元素进行添加或者删除时，其他元素也要跟着进行移位，打个比方，集合中有10个元素时，当我要对其中第5个元素进行删除，则其后面的5个元素也要向前移动一位，以保证元素的有序排列，当集合中的元素很多时，这样的增删操作就会变得很慢。不过我想这样的说法也不严谨，当对集合进行顺序增删，即对集合中的元素进行尾部插入或者删除，那样速度应该也是很快的，毕竟不需要进行移位了。既然说到了ArrayList集合，就免不了其扩容机制。扩容就是把数组复制到另一个内存空间更大的数组中去。<strong>通过ArrayList无参构造方法可以看出，其创建了一个容量大小为10的空list集合，也就是说，当我们只是创建了对象而没有添加元素的时候，集合的初始容量其实为0，在第一次添加元素的时候，集合的容量将扩容至10。通过源码中的grow()方法可以看出，如果数组的大小大于数组的初始容量的时候，即在添加第11个元素的时候，就会进行扩容，新数组容量&#x3D;老数组容量+老数组容量的1&#x2F;2，按照原容量的1.5倍进行扩容。个人认为这个1.5是按照位运算计算而来的，所以可以说是扩容1.5倍后向下取整，因为当我数组长度为奇数时，例如数组长度为17，按照1.5倍进行扩容则为25.5，向下取整扩容后的长度为25。</strong></p><p><strong>为什么ArrayList的存储特点是有序且可重复？</strong>通过源码我们可以发现，Size的定义是通过Size++来实现，即根据下标进行有序存储。同样通过源码我们并没有发现任何对存储元素是否相同的判断，所以我们可以推断ArrayList集合可以存储重复的元素。</p><p><strong>为什么ArrayList的初始化容量为10？</strong>首先当我们在讨论HashMap的时候，我们说到HashMap的初始容量16之所以会选择2的n次方，更多的考虑的是hash算法的性能与碰撞等问题。而这个问题对于ArrayList来说并不存在，因为ArrayList只是一个简单得增长集合，不用考虑算法层面的优化。只要超过一定的值进行增长即可。所以，理论上来说ArrayList的容量是任何正值都可以。ArrayList的源码中并没有说明为什么选择10，只是说了创建一个容量为10的list集合，但很大的可能是出于性能损失与空间损失之间的最佳匹配来进行考虑。10，不是很大，也不是很小，不会浪费太多的内存空间，也不会折损太多性能。就像恋爱中的男女，女生闹脾气的时候是没有明确的原因的。</p></blockquote></li></ul><hr><ul><li><h4 id="LinkedList集合"><a href="#LinkedList集合" class="headerlink" title="LinkedList集合"></a>LinkedList集合</h4><blockquote><p>说完了ArrayList，接着聊聊List集合中的LinkedList集合，<strong>LinkedList集合的底层是通过双向链表来实现的，所以其优缺点与ArrayList互补，即增删快，查询慢。</strong>因为是双向链表，在进行增删操作的时候，只需要将链表的头结点和尾节点指向新插入的节点即可，不需要去移动其他元素，所以增删快。因为双向链表会通过first以及last引用分别指向链表的第一和最后一个元素，所以头插和尾插的速度是最快的。在查询方面，之所以会查询速度较慢，是因为双向链表每次查询都要从前后两端进行查询，即离头近就从前往后查，离尾近就从后往前查，一个一个查询直至寻找到目标元素，这样就会造成查询速度较慢。</p><p>其中，对于LinkedList集合新增数据比ArrayList集合快的特点，其实也不绝对，因为<strong>如果新增的数据量非常庞大，ArrayList的新增效率反而比LinkedList高，因为ArrayList底层数组是按照1.5倍进行扩容，数据越多，扩容速度越快，扩容空间越大，弥补了前期频繁扩容的s劣势，</strong>而LinkedList底层链表仍要一个个的查找索引，分配节点，去一个个的将对象new成一个node节点，并使尾指针指向新的node节点。</p></blockquote></li></ul><hr><ul><li><h4 id="HashSet集合"><a href="#HashSet集合" class="headerlink" title="HashSet集合"></a>HashSet集合</h4><blockquote><p><strong>HashSet的底层是通过哈希表来实现。</strong>通过翻看HashSet源码，可以看出实<strong>际上就是new了一个HashMap实例，</strong>(map &#x3D; new HashMap&lt;&gt;())。HashSet中的元素都存在HashMap键值对的Key中，而Value则是一个统一的值，一个Object()对象。(<strong>private static final Object PRESENT &#x3D; new Object();</strong>)</p><p>其实说白了HashSet就是限制了功能的HashMap，所以了解了HashMap原理，自然也能理解HashSet，接下来就来谈谈HashMap。</p></blockquote></li></ul><hr><ul><li><h4 id="HashMap集合"><a href="#HashMap集合" class="headerlink" title="HashMap集合"></a>HashMap集合</h4><blockquote><p>作为双列集合map中最常用的集合HashMap，是Java中非常经典的数据结构，底层通过Hash表来实现，在JDK1.8之前，Hash表的底层是<strong>数组+链表，</strong>而在JDK1.8之后，则是<strong>数组+链表+红黑树</strong>的结构。之所以会引入红黑树，是因为链表是线性存储数据的，如果元素过多，造成链表过长，会严重影响查询以及存取性能，其实本质上是为了安全而考虑的。</p><p><strong>红黑树：一种能够自平衡的二叉查找树。</strong></p><p><strong>HashMap的存储特点是无序且不可重复，</strong>通过翻看源码可以发现，HashMap存储的无序性主要是因为其元素的存储是根据存储位置的hashcode和数组的长度计算得到的。不可重复主要是因为HashMap在存入新的键值对时，如果发生哈希冲突，即两个元素通过哈希函数得到相同的角标，此时会先判断key是否相同，如果相同，会进一步对value进行比较，如果value也相同，则不存入，如果value不相同，则新存入的value会替换老的value。如果key不相同，则新的元素会以链表的形式存入老元素中。</p><p>同样的我们来看一下HashMap的扩容机制，通过翻看源码中的put()方法可以看出，HashMap的初始容量为0，当我们第一次添加元素时，会将初始容量扩容至16，之所以会是16，也是因为在位运算中，采用2的n次方可以减少hash碰撞，以及提升效率，而作为默认容量，太大太小都不合适，所以16就作为一个比较合适的值被采用。<strong>当存储的元素大于扩容阈值，则必定会进行扩容，扩容大小为原容量的2倍，</strong>而扩容阈值则是容量与默认加载因子的乘积，默认为12，即在添加第13个元素的时候进行扩容。并且当链表的长度大于等于8且数组的长度大于64的时候，链表会自动转化为红黑树，这两个条件必须同时满足，如果数组长度小于64，则会继续采用扩容策略，因为此时数组长度较小，应尽量避开红黑树。当链表长度小于等于6时，则会从红黑树转为链表。</p><p><strong>至于为什么要将链表中转红黑树的阈值设置为8，</strong>通过计算得到，<strong>链表长度符合泊松分布，即各个长度的命中概率依次递减，当长度达到8时，是最理想值，大于8的情况小于千万分之一，</strong>综合考虑选择8为链表转红黑树的阈值。</p><p><strong>为什么扩容大小是原来的2倍</strong>，因为HashMap的默认大小必定是2的n次方，在此基础上的进行2倍扩容，不会破坏这个规律。并且在进行扩容后的数据迁移时，根据二进制运算，数据要么在原位置，要么在原位置+旧容量，这样做不会改变其哈希值，效率更高。</p><p>链表转红黑树是8，红黑树转链表是6，那7是个啥？首先7是为了避免链表与红黑树之间频繁变动做的一个预留位，如果是8变6，则此时7就是红黑树，反之6变8，此时7就是链表。</p><p><strong>为什么会出现链表和红黑树之间的转换？</strong>这是因为红黑树是以空间换取时间，提升性能的同时会占据更多的内存，当节点数较少时，使用链表也可以保证查询的效率，并且使用的空间更小，毕竟链表节点只是树节点大小的1&#x2F;2。</p><p>值得一提的是，<strong>在JDK1.7中，使用的是头插法添加元素，而在JDK1.8中则是使用尾插法添加元素。</strong>之所以会进行这样的更改，是因为头插法在扩容时会改变链表中元素原本的顺序，以至于在并发环境下会导致链表成环的问题。为了解决这样的问题，在1.8中，采取尾插法，在扩容的时候不会改变元素原本的顺序，进而大大避免了环链的问题。</p><p><strong>在JDK1.7中，在放入key之前会先扩容，</strong>放入后不重新判断是否扩容。达到阈值且hash冲突时才会扩容。如果不发生hash冲突，可超过阈值。(存在理想状态下不扩容时的最大容量12+15)。</p><p><strong>在JDK1.8中，对其进行了优化，先放入key再扩容，最多存放与阈值相同的key。</strong></p><p><strong>HashMap的线程并不安全，如果想要使其线程安全，则应使用ConcurrentHashMap，通过Synchronized锁和CAS来保证线程安全。</strong></p><p><strong>JDK1.7中，HashTable可以保证线程绝对安全，但是它是通过给整个线程加锁来实现。虽然保证线程的安全，但是严重影响性能，在1.8中被淘汰。</strong></p><p>HashTable初始容量为11，默认加载因子0.75。</p><p>HashMap初始容量为0，在第一次添加元素时扩容为16，默认加载因子0.75。</p><p><strong>HashMap对象的key、value值均可为null。</strong></p><p><strong>HahTable对象的key、value值均不可为null。</strong></p><p>问题出在int hash &#x3D; key.hashCode()这里，当key为null时，key.hashCode()会报空指针异常。所以HashMap改写了hashCode函数。</p></blockquote></li></ul>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Java基础 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2020/02/13/hello-world/"/>
+      <url>/2020/02/13/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p><strong>对搭建的博客完成大部分主题渲染，纪念一下</strong></p><p><img src="/2020/02/13/hello-world/Develop\MyBlog\themes\butterfly\source\img\tag.png"></p><p><strong>PS:博文就看心情更新吧</strong></p>]]></content>
       
       
       
